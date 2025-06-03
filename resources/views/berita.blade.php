@@ -175,8 +175,8 @@
                                 <td>{{ $item->jumlah_peserta }}</td>
                                 <td>{{ $item->hasil_rapat }}</td>
                                 <td>
-                                    @if(isset($item->id_berita_acara) && $item->id_berita_acara)
-                                        <a href="{{ route('berita-acara.download', ['id' => $item->id_berita_acara]) }}">Download PDF</a>
+                                    @if($item->jadwalRapat)
+                                        <a href="{{ route('berita-acara.download', ['id' => $item->jadwalRapat->id_jadwal]) }}">Download PDF</a>
                                     @else
                                         <span class="text-danger">ID Input tidak tersedia</span>
                                     @endif
