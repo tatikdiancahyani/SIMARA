@@ -260,38 +260,6 @@
                 const tanggal = this.dataset['tanggal'];
                 const detail = document.getElementById('eventContent');
                 detail.innerHTML = await fetchDetailRapat(tanggal)
-                return
-
-                if (events.length > 0) {
-                    let html = '';
-                    events.forEach(event => {
-                        let beritaAcara = '';
-                        if (event.berita_acara) {
-                            beritaAcara = `<p><strong>Berita Acara</strong><br>
-                            Ruang: ${event.berita_acara.ruang}<br/>
-                            Peserta: ${event.berita_acara.jumlah_peserta}<br/>
-                            Notulen: ${event.berita_acara.hasil_rapat}<br/>
-                            <a href='#' class="btn btn-info">Download PDF</a>`
-                        }
-                        html += `
-                    <div style="margin-bottom: 15px;">
-                        <p><strong>${event.judul}</strong><br>
-                        Tanggal: ${event.tanggal}<br>
-                        Waktu: ${event.waktu}<br>
-                        Tempat: ${event.tempat}<br>
-                        Deskripsi: ${event.deskripsi}</p>
-                        ${beritaAcara}
-                        <button onclick="hapusRapat(${event.id_jadwal})" class="btn-danger">Hapus</button>
-                        <button onclick='editRapat(${JSON.stringify(event)})' class="btn-warning">Edit</button>
-                    </div>
-                    <hr>
-                    `;
-
-                    });
-                    detail.innerHTML = html;
-                } else {
-                    detail.innerHTML = 'Tidak ada acara pada tanggal ini.';
-                }
             });
 
             calendar.appendChild(dayCell);
