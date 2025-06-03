@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KonsumsiController;
 use App\Http\Controllers\SarprasController;
 use App\Http\Controllers\JadwalRapatController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,11 +23,18 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('logout', 'logout')->middleware('auth')->name('logout');
 });
 
+// User Management Routes
+Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::resource('users', UserController::class);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+
 
     Route::controller(SarprasController::class)->prefix('sarpras')->group(function () {
         Route::get('', 'index')->name('sarpras');
@@ -40,7 +49,7 @@ Route::middleware('auth')->group(function () {
 
 
     //form rapat
-    Route::get('/rapat', [jadwalRapatController::class, 'rapat'])->name('rapat'); 
+    Route::get('/rapat', [jadwalRapatController::class, 'rapat'])->name('rapat');
     Route::post('/jadwal-rapat/store', [JadwalRapatController::class, 'store'])->name('jadwal-rapat.store');
     Route::put('/jadwal-rapat/{id_jadwal}', [JadwalRapatController::class, 'update'])->name('jadwal_rapat.update');
     Route::delete('/jadwal-rapat/{id_jadwal}', [JadwalRapatController::class, 'destroy'])->name('jadwal_rapat.destroy');
@@ -57,8 +66,8 @@ Route::middleware('auth')->group(function () {
     //submit
     Route::post('/submit-all', [SarprasController::class, 'submitAll'])->name('submit.all');
     // berita
-    Route::get('/berita', [AuthController::class, 'berita'])->name('berita'); 
-    Route::post('/berita', [AuthController::class, 'store'])->name('store.berita'); 
+    Route::get('/berita', [AuthController::class, 'berita'])->name('berita');
+    Route::post('/berita', [AuthController::class, 'store'])->name('store.berita');
     Route::get('/berita-acara/{id}/download', [AuthController::class, 'downloadPDF'])->name('berita-acara.download');
     Route::get('/berita-acara/{id}', [AuthController::class, 'edit'])->name('berita-acara.edit');
     Route::put('/berita-acara/{id}', [AuthController::class, 'updateBerita'])->name('berita-acara.update');

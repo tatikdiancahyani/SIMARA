@@ -46,6 +46,12 @@
             <span>Notulen</span>
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ request()->is('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Users</span>
+        </a>
+    </li>
   @endif
 
     </li>
