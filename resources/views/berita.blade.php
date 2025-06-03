@@ -153,7 +153,7 @@
 
                 <!-- Menampilkan tabel jika ada data berita acara -->
                 @if($beritaAcara->isNotEmpty())
-                    <table border="1" cellspacing="0" cellpadding="5">
+                    <table border="1" cellspacing="0" cellpadding="5" style="width:100%">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -175,8 +175,8 @@
                                 <td>{{ $item->jumlah_peserta }}</td>
                                 <td>{{ $item->hasil_rapat }}</td>
                                 <td>
-                                    @if(isset($item->id_input) && $item->id_input)
-                                        <a href="{{ route('berita-acara.download', ['id' => $item->id_input]) }}">Download PDF</a>
+                                    @if(isset($item->id_berita_acara) && $item->id_berita_acara)
+                                        <a href="{{ route('berita-acara.download', ['id' => $item->id_berita_acara]) }}">Download PDF</a>
                                     @else
                                         <span class="text-danger">ID Input tidak tersedia</span>
                                     @endif

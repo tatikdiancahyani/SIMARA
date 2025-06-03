@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <select name="role" class="form-control form-control-user @error('role')is-invalid @enderror">
+                                    <select name="role" style="padding: 0rem 1rem; height: 3rem;" class="form-control form-control-user @error('role')is-invalid @enderror">
                                         <option value="admin">Admin</option>
                                         <option value="karyawan">Karyawan</option>
                                     </select>

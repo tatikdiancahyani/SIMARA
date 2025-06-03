@@ -28,13 +28,14 @@ class SarprasController extends Controller
         return view('sarpras.create', compact('id_jadwal'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function submitAll(Request $request)
     {
+        if (empty(session('form'))) {
+            return redirect()->route('rapat');
+        }
+
         // Validasi input
-        $validated = $request->validate([
+        $sarprasData = $request->validate([
             // 'id_jadwal' => 'required|exists:jadwal,id',
             'nama_sarpras' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:0',
@@ -43,31 +44,11 @@ class SarprasController extends Controller
             'anggaran' => 'required|numeric|min:0',
         ]);
 
-        // Simpan ke session
-        session(['form.sarpras' => [
-            // 'id_jadwal' => $request->id_jadwal,
-            'nama_sarpras' => $validated['nama_sarpras'],
-            'jumlah' => $validated['jumlah'],
-            'harga' => $validated['harga'],
-            'pajak' => $validated['pajak'],
-            'anggaran' => $validated['anggaran'],
-        ]]);
-        session()->save();
-        // kembali ke form konsumsi
-        return redirect()->route('submit.all'); //redirect ke penyimpanan db
-    }
-    public function submitAll()
-    {
-        if (empty(session('form'))) {
-            return redirect()->route('rapat');
-        }
-
         // Gunakan transaction, agar ketika ada error pada saat penyimpanan
         // data konsumsi/sarpras, maka penyimpanan data jadwal juga akan dibatalkan.
-        DB::transaction(function () {
+        DB::transaction(function () use($sarprasData) {
             $jadwalData = session('form.jadwal');
             $konsumsiData = session('form.konsumsi');
-            $sarprasData = session('form.sarpras');
 
             // Simpan ke DB
             $jadwal = JadwalRapat::create($jadwalData);

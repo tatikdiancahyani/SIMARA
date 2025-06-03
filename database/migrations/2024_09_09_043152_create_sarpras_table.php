@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('sarpras', function (Blueprint $table) {
             $table->id('id_sarpras'); 
-            $table->foreignId('id_jadwal')->constrained('jadwal_rapats');
-            $table->string('nama_sarpras'); // Nama sarana/prasarana
+            $table->foreignId('id_jadwal')->constrained('jadwal_rapats', 'id_jadwal');
+            $table->string('nama_sarpras')->nullable(); // Nama sarana/prasarana
             $table->integer('jumlah')->default(0); // Jumlah sarana/prasarana
-            $table->decimal('anggaran', 10, 2); // Anggaran untuk sarana/prasarana
-            $table->decimal('harga', 10, 2); // Harga per unit
+            $table->decimal('anggaran', 10, 2)->nullable(); // Anggaran untuk sarana/prasarana
+            $table->decimal('harga', 10, 2)->nullable(); // Harga per unit
             $table->decimal('pajak', 10, 2)->default(0); // Pajak, default 0
-            $table->decimal('total', 10, 2)->virtualAs('(jumlah * harga + pajak)'); // Total biaya
+            $table->integer('total')->virtualAs('jumlah * harga + pajak'); // Total biaya
             $table->timestamps(); // Kolom created_at dan updated_at
         });
     }

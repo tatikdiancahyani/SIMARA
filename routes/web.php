@@ -42,7 +42,10 @@ Route::middleware('auth')->group(function () {
     //form rapat
     Route::get('/rapat', [jadwalRapatController::class, 'rapat'])->name('rapat'); 
     Route::post('/jadwal-rapat/store', [JadwalRapatController::class, 'store'])->name('jadwal-rapat.store');
+    Route::put('/jadwal-rapat/{id_jadwal}', [JadwalRapatController::class, 'update'])->name('jadwal_rapat.update');
+    Route::delete('/jadwal-rapat/{id_jadwal}', [JadwalRapatController::class, 'destroy'])->name('jadwal_rapat.destroy');
     Route::get('/jadwal-rapat', [JadwalRapatController::class, 'index'])->name('jadwal-rapat.index');
+    Route::get('/list-rapat-per-tanggal/{tanggal}', [JadwalRapatController::class, 'listRapatPerTanggal'])->name('jadwal-rapat.list-tanggal');
     Route::get('/form/rapat', [JadwalRapatcontroller::class, 'create'])->name('form.jadwal');
     Route::get('/jadwal-rapat', [JadwalRapatController::class, 'index']);
     //form konsumsi
@@ -50,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/form/konsumsi', [KonsumsiController::class, 'store'])->name('konsumsi.store');
     //form sarpras
     Route::get('/form/sarpras', [SarprasController::class, 'create'])->name('form.sarpras');
-    Route::post('/form/sarpras', [SarprasController::class, 'store'])->name('sarpras.store');
+    // Route::post('/form/sarpras', [SarprasController::class, 'store'])->name('sarpras.store');
     //submit
     Route::post('/submit-all', [SarprasController::class, 'submitAll'])->name('submit.all');
     // berita

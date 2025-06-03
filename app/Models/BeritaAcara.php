@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class BeritaAcara extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'id_input'; // Primary Key
+    protected $table = 'berita_acaras';
+    protected $primaryKey = 'id_berita_acara'; // Primary Key
     public $timestamps = true; // Pastikan timestamps aktif
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nama_rapat',
@@ -18,5 +20,11 @@ class BeritaAcara extends Model
         'ruang',
         'jumlah_peserta',
         'hasil_rapat',
+        'id_jadwal',
     ];
+
+    public function jadwalRapat()
+    {
+        return $this->belongsTo(JadwalRapat::class, 'id_jadwal');
+    }
 }

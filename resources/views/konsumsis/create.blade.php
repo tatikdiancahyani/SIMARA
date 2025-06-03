@@ -95,7 +95,7 @@
                         <option value="" disabled {{ old('jenis_konsumsi', session('form.konsumsi.jenis_konsumsi')) == '' ? 'selected' : '' }}>Pilih jenis konsumsi</option>
                         <option value="Snack" {{ old('jenis_konsumsi', session('form.konsumsi.jenis_konsumsi')) == 'Snack' ? 'selected' : '' }}>Snack</option>
                         <option value="Nasi" {{ old('jenis_konsumsi', session('form.konsumsi.jenis_konsumsi')) == 'Nasi' ? 'selected' : '' }}>Nasi</option>
-                        <option value="Nasi + Snack" {{ old('jenis_konsumsi', session('form.konsumsi.jenis_konsumsi')) == 'Nasi + Snack' ? 'selected' : '' }}>Nasi + Snack</option>
+                        <option value="Snack dan Nasi" {{ old('jenis_konsumsi', session('form.konsumsi.jenis_konsumsi')) == 'Snack dan Nasi' ? 'selected' : '' }}>Nasi + Snack</option>
                     </select>
 
                     <label for="jumlah">Jumlah:</label>

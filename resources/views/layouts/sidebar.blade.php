@@ -30,7 +30,7 @@
     </a>
 
     </li>
-    
+    @if ( Auth::user()->role == 'admin')
     <li class="nav-item">
       <a class="nav-link {{ request()->routeIs('rapat') ? 'active' : '' }}" href="{{ route('rapat') }}">
             <i class="fas fa-fw fa-calendar-alt"></i>
@@ -46,7 +46,7 @@
             <span>Notulen</span>
         </a>
     </li>
-
+  @endif
 
     </li>
     <li class="nav-item">

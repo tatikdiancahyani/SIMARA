@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BeritaAcara;
+use App\Models\JadwalRapat;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -94,6 +95,7 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_jadwal' => 'required|integer',
             'nama_rapat' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'ruang' => 'required|string|max:255',
@@ -101,20 +103,34 @@ class AuthController extends Controller
             'hasil_rapat' => 'required|string|max:255',
         ]);
 
-        $berita = BeritaAcara::create([
-            'nama_rapat' => $request->nama_rapat,
-            'tanggal' => $request->tanggal,
-            'ruang' => $request->ruang,
-            'jumlah_peserta' => $request->jumlah_peserta,
-            'hasil_rapat' => $request->hasil_rapat,
-        ]);
+        $jadwalRapat = JadwalRapat::findOrFail($request->id_jadwal);
 
-        return redirect()->back()->with('success', 'Berita acara berhasil disimpan!');
+        // Cek apakah sudah pernah di input?
+        if ($jadwalRapat->beritaAcara()->exists()) {
+            // update
+            $jadwalRapat->beritaAcara->nama_rapat = $request->nama_rapat;
+            $jadwalRapat->beritaAcara->tanggal = $request->tanggal;
+            $jadwalRapat->beritaAcara->ruang = $request->ruang;
+            $jadwalRapat->beritaAcara->jumlah_peserta = $request->jumlah_peserta;
+            $jadwalRapat->beritaAcara->hasil_rapat = $request->hasil_rapat;
+            $jadwalRapat->beritaAcara->save();
+        }else{
+            BeritaAcara::create([
+                'id_jadwal' => $request->id_jadwal,
+                'nama_rapat' => $request->nama_rapat,
+                'tanggal' => $request->tanggal,
+                'ruang' => $request->ruang,
+                'jumlah_peserta' => $request->jumlah_peserta,
+                'hasil_rapat' => $request->hasil_rapat,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Berhasil disimpan.');
     }
 
     public function downloadPDF($id)
     {
-        $berita = BeritaAcara::where('id_input', $id)->firstOrFail();
+        $berita = BeritaAcara::where('id_berita_acara', $id)->firstOrFail();
         $pdf = PDF::loadView('pdf.berita_acara', [
             'tanggal' => $berita->tanggal,
             'ruang' => $berita->ruang,
@@ -122,7 +138,7 @@ class AuthController extends Controller
             'jumlah_peserta' => $berita->jumlah_peserta,
             'hasil_rapat' => $berita->hasil_rapat,
         ]);
-        return $pdf->download('berita_acara_' . $berita->id_input . '.pdf');
+        return $pdf->download('berita_acara_' . $berita->id_berita_acara . '.pdf');
     }
 
     public function destroy($id)

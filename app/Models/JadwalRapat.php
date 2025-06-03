@@ -19,6 +19,7 @@ class JadwalRapat extends Model
         'tanggal',
         'waktu',
         'tempat',
+        'deskripsi',
     ];
 
     public function user()
@@ -28,11 +29,16 @@ class JadwalRapat extends Model
 
     public function konsumsi()
     {
-        return $this->hasMany(Konsumsi::class, 'id_jadwal');
+        return $this->hasOne(Konsumsi::class, 'id_jadwal');
     }
 
     public function sarpras()
     {
-        return $this->hasMany(Sarpras::class, 'id_jadwal');
+        return $this->hasOne(Sarpras::class, 'id_jadwal');
+    }
+
+    public function beritaAcara()
+    {
+        return $this->hasOne(BeritaAcara::class, 'id_jadwal');
     }
 }
