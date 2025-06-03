@@ -80,6 +80,9 @@
         <div class="content">
             <h2>BERITA ACARA RAPAT KALURAHAN PURWOMARTANI</h2>
             <p>Pada tanggal {{ $tanggal }} di ruang {{ $ruang }} telah dilaksanakan Rapat "{{ $nama_rapat }}" yang dihadiri oleh {{ $jumlah_peserta }} peserta.</p>
+            <p>Dengan konsumsi berupa {{ $konsumsi->jenis_konsumsi }} dan sarana {{ $sarpras->nama_sarpras }}, menggunakan total anggaran Rp. {{ $konsumsi->total + $sarpras->total }},- .</p>
+            <!-- Isi detail lainnya eg: sarpras or total -->
+
             <p>Rapat ini telah membahas:</p>
             <ol>
                 <li>{{ $hasil_rapat }}</li>

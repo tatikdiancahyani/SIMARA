@@ -64,7 +64,9 @@
     <tfoot>
         <tr>
             <td colspan="3">
-                <a href='#' class="btn btn-info">Download PDF</a>
+                @if ( $rapat->beritaAcara )
+                <a href="{{ route('berita-acara.download', ['id' => $rapat->id_jadwal]) }}" class="btn btn-info">Download Berita Acara PDF</a>
+                @endif
                 @if ( Auth::user()->role == 'admin')
                 <button onclick="hapusRapat('{{ $rapat->id_jadwal }}')" class="btn-danger">Hapus</button>
                 <button onclick="editRapat({{ json_encode($rapat) }})" class="btn-warning">Edit</button>

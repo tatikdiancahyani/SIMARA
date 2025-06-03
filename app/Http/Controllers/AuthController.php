@@ -128,10 +128,18 @@ class AuthController extends Controller
         return redirect()->back()->with('success', 'Berhasil disimpan.');
     }
 
-    public function downloadPDF($id)
+    public function downloadPDF($id_jadwal)
     {
-        $berita = BeritaAcara::where('id_berita_acara', $id)->firstOrFail();
+        $rapat = JadwalRapat::with(['konsumsi', 'sarpras', 'beritaAcara'])->findOrFail($id_jadwal);
+        $berita = $rapat->beritaAcara;
+        $konsumsi = $rapat->konsumsi;
+        $sarpras = $rapat->sarpras;
+
         $pdf = PDF::loadView('pdf.berita_acara', [
+            'rapat' => $rapat,
+            'konsumsi' => $konsumsi,
+            'sarpras' => $sarpras,
+            // Berita Acara
             'tanggal' => $berita->tanggal,
             'ruang' => $berita->ruang,
             'nama_rapat' => $berita->nama_rapat,
