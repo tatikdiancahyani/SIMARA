@@ -7,21 +7,11 @@ use App\Models\JadwalRapat;
 use App\Models\Konsumsi;
 use App\Models\Sarpras;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SarprasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $id_jadwal = $request->id_jadwal;
-        return view('sarpras.create', compact('id_jadwal'));
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         $id_jadwal = $request->query('id_jadwal'); // atau ->input()
@@ -42,11 +32,20 @@ class SarprasController extends Controller
             'harga' => 'required|numeric|min:0',
             'pajak' => 'nullable|numeric|min:0',
             'anggaran' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+
         ]);
+
+        // Jika ada image diupload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imagePath = Storage::disk('public')->putFile('konsumsi', $file);
+            $sarprasData['image_path'] = $imagePath;
+        }
 
         // Gunakan transaction, agar ketika ada error pada saat penyimpanan
         // data konsumsi/sarpras, maka penyimpanan data jadwal juga akan dibatalkan.
-        DB::transaction(function () use($sarprasData) {
+        DB::transaction(function () use ($sarprasData) {
             $jadwalData = session('form.jadwal');
             $konsumsiData = session('form.konsumsi');
 
@@ -66,68 +65,6 @@ class SarprasController extends Controller
             // Kosongkan session
             session()->forget('form');
         });
-        return redirect()->route('dashboard')->with('success', 'Data berhasil disimpan!');
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $sarpras = Sarpras::findOrFail($id);
-
-        return view('sarpras.show', compact('sarpras'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $sarpras = Sarpras::findOrFail($id);
-
-        return view('sarpras.edit', compact('sarpras'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        // Cari data
-        $sarpras = Sarpras::findOrFail($id);
-
-        // Validasi input
-        $request->validate([
-            'nama_sarpras' => 'required|string|max:255',
-            'jumlah' => 'required|integer|min:0',
-            'harga' => 'required|numeric|min:0',
-            'pajak' => 'nullable|numeric|min:0',
-            'anggaran' => 'required|numeric|min:0',
-            'tanggal_pengadaan' => 'required|date',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
-        ]);
-
-        // Update data ke database tanpa kolom 'total'
-        $sarpras->nama_sarpras = $request->input('nama_sarpras');
-        $sarpras->jumlah = $request->input('jumlah');
-        $sarpras->harga = $request->input('harga');
-        $sarpras->pajak = $request->input('pajak', 0);
-        $sarpras->anggaran = $request->input('anggaran');
-        $sarpras->tanggal_pengadaan = $request->input('tanggal_pengadaan');
-        $sarpras->save();
-
-        return redirect()->route('sarpras')->with('success', 'Data sarpras berhasil diupdate!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $sarpras = Sarpras::findOrFail($id);
-
-        $sarpras->delete();
-
-        return redirect()->route('sarpras')->with('success', 'sarpras deleted successfully');
+        return redirect()->route('home')->with('success', 'Data berhasil disimpan!');
     }
 }

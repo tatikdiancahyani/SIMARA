@@ -113,6 +113,18 @@
                     <input type="text" id="total" name="total" class="total-input" readonly>
 
                     <div id="warning" class="warning" style="display: none;"></div>
+                    
+                    <div class="form-group">
+                        @if (session('form.konsumsi.image_path'))
+                            <b>Gambar:</b><br/>
+                            <img src="{{ Storage::url(session('form.konsumsi.image_path')) }}" alt="Meeting Image" class="img-fluid" style="max-width: 300px;">
+                        @else
+                            <label for="meeting_image">Gambar (Opsional):</label>
+                            <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+                            <small class="form-text text-muted">Format: JPG, PNG, GIF.</small>
+                            
+                        @endif
+                    </div>
 
                     <a href="{{ route('form.jadwal') }}" class="btn btn-secondary">Back</a>
                     <button type="submit" class="btn btn-primary">Next</button>
@@ -160,7 +172,7 @@
                 document.getElementById('modalAnggaran').style.display = 'flex';
                 hitungTotal(); // Trigger jika data lama ada
             };
-            // Mengecek apakah form valid
+
         </script>
     </body>
 </html>

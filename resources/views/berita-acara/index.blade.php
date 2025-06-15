@@ -176,7 +176,7 @@
                                 <td>{{ $item->hasil_rapat }}</td>
                                 <td>
                                     @if($item->jadwalRapat)
-                                        <a href="{{ route('berita-acara.download', ['id' => $item->jadwalRapat->id_jadwal]) }}">Download PDF</a>
+                                        <a href="{{ route('berita.download', ['id' => $item->jadwalRapat->id_jadwal]) }}">Download PDF</a>
                                     @else
                                         <span class="text-danger">ID Input tidak tersedia</span>
                                     @endif

@@ -21,16 +21,15 @@
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
   
-  <!-- Nav Item - Dashboard -->
+  <!-- Nav Item - Home -->
   <ul class="nav">
     <li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span>
     </a>
 
     </li>
-    @if ( Auth::user()->role == 'admin')
     <li class="nav-item">
       <a class="nav-link {{ request()->routeIs('rapat') ? 'active' : '' }}" href="{{ route('rapat') }}">
             <i class="fas fa-fw fa-calendar-alt"></i>
@@ -46,13 +45,6 @@
             <span>Notulen</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link {{ request()->is('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Users</span>
-        </a>
-    </li>
-  @endif
 
     </li>
     <li class="nav-item">

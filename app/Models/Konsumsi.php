@@ -20,6 +20,7 @@ class Konsumsi extends Model
         'harga',
         'pajak',
         'total',
+        'image_path',
         'id_jadwal',
     ];
     public function jadwal()

@@ -1,0 +1,9 @@
+CATATAN SIMULASI DEMO:
+[v] register dihapus  
+[v] home
+[v] button + jika jadwalnya sama di tanggal di jam yang sama dikasih validasi 
+[v] untuk karyawan nggak ada login, home langsung dashboard
+[v] tambah upload image di konsumsi dan sarpras 
+[v] user management dihapus 
+[v] profil ditambah dengan ganti password
+[v] nggak ada pegawainya dibuat terbuka untuk semua aja

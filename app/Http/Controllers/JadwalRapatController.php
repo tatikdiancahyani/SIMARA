@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class JadwalRapatController extends Controller
 {
-    public function rapat(Request $request)
+    public function index(Request $request)
     {
 
         $selectedDate = $request->input('date');
@@ -24,17 +24,12 @@ class JadwalRapatController extends Controller
             ->orderBy('waktu')
             ->get();
 
-        return view('rapat.jadwal-rapat', compact('jadwalRapats', 'selectedDate'));
-    }
-
-    public function create()
-    {
-        return view('rapat.jadwal-rapat');
+        return view('rapat.index', compact('jadwalRapats', 'selectedDate'));
     }
 
     public function store(Request $request)
     {
-        // Validasi data
+        // Validasi input data
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
@@ -48,6 +43,20 @@ class JadwalRapatController extends Controller
 
         session()->save();
 
+        // Validasi apakah sudah ada rapat di waktu yang sama
+        $waktu = Carbon::parse($validated['waktu']);
+        $rapats = JadwalRapat::whereDate('tanggal', $validated['tanggal'])
+            ->whereTime('waktu', $waktu->format('H:i:s'))
+            ->get();
+
+        // Kembali ke home jika ada yang sama
+        if ($rapats->isNotEmpty()) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['conflict' => 'Rapat dengan tanggal dan waktu yang sama sudah ada. Silakan pilih waktu lain.']);
+        }
+        
+        // Next input konsumsi
         return redirect()->route('form.konsumsi');
     }
 
@@ -87,20 +96,10 @@ class JadwalRapatController extends Controller
         // validasi & session()->put(...)
         return redirect()->route('form.konsumsi');
     }
-    public function index()
+
+    public function listJadwal()
     {
         $jadwal = JadwalRapat::get(); // Ambil semua data jadwal rapat
         return response()->json($jadwal); // Kembalikan sebagai JSON
-    }
-
-    public function listRapatPerTanggal($tanggal)
-    {
-        $selectedDate = Carbon::parse($tanggal)->toDateString();
-        $rapats = JadwalRapat::whereDate('tanggal', $selectedDate)
-            ->with(['konsumsi', 'sarpras', 'beritaAcara'])
-            ->orderBy('waktu')
-            ->get();
-
-        return view('dashboard-list-rapat-per-tanggal', compact('rapats', 'tanggal'));
     }
 }

@@ -111,6 +111,18 @@
 
                     <div id="warning" class="warning" style="display: none;"></div>
 
+                    <div class="form-group">
+                        @if (session('form.sarpras.image_path'))
+                            <b>Gambar:</b><br/>
+                            <img src="{{ Storage::url(session('form.sarpras.image_path')) }}" alt="Meeting Image" class="img-fluid" style="max-width: 300px;">
+                        @else
+                            <label for="meeting_image">Gambar (Opsional):</label>
+                            <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+                            <small class="form-text text-muted">Format: JPG, PNG, GIF.</small>
+                            
+                        @endif
+                    </div>
+
                     <a href="{{ route('form.konsumsi') }}" class="btn btn-secondary ">Back</a>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

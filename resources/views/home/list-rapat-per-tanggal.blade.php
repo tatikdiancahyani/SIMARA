@@ -34,8 +34,10 @@
                     Pajak: {{ $rapat->konsumsi->pajak }}<br />
                     Anggaran: {{ $rapat->konsumsi->anggaran }}<br />
                     Total: {{ $rapat->konsumsi->total }}<br />
-
                 </p>
+                @if ($rapat->konsumsi->image_path)
+                    <img src="{{ Storage::url($rapat->konsumsi->image_path) }}" alt="Meeting Image" class="img-fluid clickable-image" style="max-width: 200px; padding: 15px">
+                @endif
             </td>
             <td>
                 <p>
@@ -45,8 +47,10 @@
                     Pajak: {{ $rapat->sarpras->pajak }}<br />
                     Anggaran: {{ $rapat->sarpras->anggaran }}<br />
                     Total: {{ $rapat->sarpras->total }}<br />
-
                 </p>
+                @if ($rapat->sarpras->image_path)
+                    <img src="{{ Storage::url($rapat->sarpras->image_path) }}" alt="Meeting Image" class="img-fluid clickable-image" style="max-width: 200px; padding: 15px">
+                @endif
             </td>
             <td>
                 @if ( $rapat->beritaAcara )
@@ -65,12 +69,12 @@
         <tr>
             <td colspan="3">
                 @if ( $rapat->beritaAcara )
-                <a href="{{ route('berita-acara.download', ['id' => $rapat->id_jadwal]) }}" class="btn btn-info">Download Berita Acara PDF</a>
+                <a href="{{ route('berita.download', ['id' => $rapat->id_jadwal]) }}" class="btn btn-info">Download Berita Acara PDF</a>
                 @endif
-                @if ( Auth::user()->role == 'admin')
+                @auth
                 <button onclick="hapusRapat('{{ $rapat->id_jadwal }}')" class="btn-danger">Hapus</button>
                 <button onclick="editRapat({{ json_encode($rapat) }})" class="btn-warning">Edit</button>
-                @endif
+                @endauth
             </td>
         </tr>
     </tfoot>
