@@ -28,12 +28,12 @@
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span>
     </a>
-
     </li>
+
     <li class="nav-item">
       <a class="nav-link {{ request()->routeIs('rapat') ? 'active' : '' }}" href="{{ route('rapat') }}">
             <i class="fas fa-fw fa-calendar-alt"></i>
-            <span>Rapat</span>
+            <span>Notulen</span>
         </a>
     </li>
 
@@ -42,7 +42,7 @@
     <li class="nav-item">
         <a class="nav-link {{ request()->is('berita') ? 'active' : '' }}" href="{{ route('berita') }}">
             <i class="fas fa-fw fa-newspaper"></i>
-            <span>Notulen</span>
+            <span>Cetak Notulen</span>
         </a>
     </li>
 
@@ -54,6 +54,14 @@
     </a>
 
     </li>
+     <li class="nav-item">
+    <a class="nav-link {{ request()->is('logout') ? 'active' : '' }}" href="{{ route('logout') }}">
+        <i class="fas fa-fw fa-user"></i>
+        <span>Logout</span>
+    </a>
+
+    </li>
+    
     
   </ul>
   

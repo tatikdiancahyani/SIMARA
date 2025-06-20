@@ -13,6 +13,11 @@
     <!-- Tampil Form Tambah & Edit Jadwal Jika sudah login -->
     @include('home.form')
     @endauth
+    
+   <!-- Kalender -->
+    <h3 style="margin-top: 40px; margin-bottom: 15px; font-weight: bold; color: #333; text-align: center;">Kalender Rapat Kalurahan Purwomartani</h3>
+    <div class="calendar-container" style="background: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">
+
 
     <!-- Kalender -->
     <div class="calendar-container" style="background: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">

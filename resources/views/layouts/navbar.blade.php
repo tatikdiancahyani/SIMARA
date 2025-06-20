@@ -32,22 +32,10 @@
                         <br>
                         <small>{{ auth()->user()->level }}</small>
                     </span>
-                    <!-- Menampilkan foto profil yang disimpan di storage -->
-                    <img class="img-profile rounded-circle"
-                        src="{{ asset('storage/profile_pictures/' . auth()->user()->id . '/profile_picture.jpg') }}"
-                        alt="User Profile" width="30" height="30">
+
+                    
                 </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="/profile">
-                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Profile
-                    </a>
-                    <a class="dropdown-item" href="{{ route('logout') }}">
-                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Logout
-                    </a>
-                </div>
+                
             </li>
         </ul>
     @endauth

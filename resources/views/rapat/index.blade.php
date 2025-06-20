@@ -137,7 +137,7 @@
                             <div>
                                 <span class="close" onclick="tutupModal('{{ $jadwalRapat->id_jadwal }}')">&times;</span>
                             </div>
-                            <h1>Input Berita Acara</h1>
+                            <h1> Notulen</h1>
                             <form action="{{ route('store.berita') }}" method="POST">
                                 @csrf
                                 <label for="nama_rapat">Nama Rapat</label>

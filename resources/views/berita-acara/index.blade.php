@@ -5,9 +5,10 @@
 @section('contents')
     <html>
     <head>
-    <title>
-    Berita Acara Rapat
-    </title>
+        <title>
+        Berita Acara Rapat
+        </title>
+    </head>
     <style>
         body {
                font-family: Arial, sans-serif;
@@ -120,15 +121,15 @@
             cursor: pointer;
         }
     </style>
-    </head>
-            <div class="container">
+    <body>
+        <div class="container">
                 <!-- Tombol untuk menampilkan form -->
 
                 <!-- Modal untuk input berita acara (awalnya disembunyikan) -->
                 <div id="modalBeritaAcara" class="modal" style="display: none;">
                     <div class="modal-content">
                         <span id="closeModal" class="close">&times;</span>
-                        <h1>Input Berita Acara</h1>
+                        <h1>Input Notulen</h1>
                         <form action="{{ route('store.berita') }}" method="POST">
                             @csrf
                             <label for="nama_rapat">Nama Rapat</label>
@@ -214,5 +215,6 @@
                 });
             </script>
     </body>
+            
     </html>
 @endsection
