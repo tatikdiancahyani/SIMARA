@@ -43,28 +43,48 @@ class SarprasController extends Controller
             $sarprasData['image_path'] = $imagePath;
         }
 
-        // Gunakan transaction, agar ketika ada error pada saat penyimpanan
-        // data konsumsi/sarpras, maka penyimpanan data jadwal juga akan dibatalkan.
-        DB::transaction(function () use ($sarprasData) {
-            $jadwalData = session('form.jadwal');
-            $konsumsiData = session('form.konsumsi');
+        if( $request->input('id_sarpras') ){
+            // update ke database
+            $id = $request->input('id_sarpras');
+            
+            $sarpras = Sarpras::findOrFail($id);
+            $sarpras->update($sarprasData);
+            return redirect()->route('home');
+        }else{
 
-            // Simpan ke DB
-            $jadwal = JadwalRapat::create($jadwalData);
-            $konsumsiData['id_jadwal'] = $jadwal->id_jadwal;
-            $sarprasData['id_jadwal'] = $jadwal->id_jadwal;
+            // Gunakan transaction, agar ketika ada error pada saat penyimpanan
+            // data konsumsi/sarpras, maka penyimpanan data jadwal juga akan dibatalkan.
+            DB::transaction(function () use ($sarprasData) {
+                $jadwalData = session('form.jadwal');
+                $konsumsiData = session('form.konsumsi');
 
-            // Nilai total akan di generate di oleh database (Virtual type)
-            unset($konsumsiData['total']);
-            unset($sarprasData['total']);
+                // Simpan ke DB
+                $jadwal = JadwalRapat::create($jadwalData);
+                $konsumsiData['id_jadwal'] = $jadwal->id_jadwal;
+                $sarprasData['id_jadwal'] = $jadwal->id_jadwal;
 
-            //konsumsi
-            Konsumsi::create($konsumsiData);
-            Sarpras::create($sarprasData);
+                // Nilai total akan di generate di oleh database (Virtual type)
+                unset($konsumsiData['total']);
+                unset($sarprasData['total']);
 
-            // Kosongkan session
-            session()->forget('form');
-        });
-        return redirect()->route('home')->with('success', 'Data berhasil disimpan!');
+                //konsumsi
+                Konsumsi::create($konsumsiData);
+                Sarpras::create($sarprasData);
+
+                // Kosongkan session
+                session()->forget('form');
+            });
+            return redirect()->route('home')->with('success', 'Data berhasil disimpan!');
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $sarpras = Sarpras::findOrFail($id);
+
+        return view('sarpras.create', compact('sarpras'));
     }
 }

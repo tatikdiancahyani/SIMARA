@@ -23,8 +23,8 @@ class JadwalRapatController extends Controller
             ->with(['konsumsi', 'sarpras', 'beritaAcara'])
             ->orderBy('waktu')
             ->get();
-
-        return view('rapat.index', compact('jadwalRapats', 'selectedDate'));
+        $judul = \Carbon\Carbon::parse($selectedDate)->translatedFormat('l, d F Y');
+        return view('notulen.index', compact('jadwalRapats', 'selectedDate', 'judul'));
     }
 
     public function store(Request $request)

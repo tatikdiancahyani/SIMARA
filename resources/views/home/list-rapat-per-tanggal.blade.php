@@ -11,14 +11,14 @@
                         <th style="padding: 10px; border: 1px solid #dee2e6;">Konsumsi</th>
                         <th style="padding: 10px; border: 1px solid #dee2e6;">Sarpras</th>
                         <th style="padding: 10px; border: 1px solid #dee2e6;">Berita Acara</th>
-                        <th style="padding: 10px; border: 1px solid #dee2e6;">Aksi</th>
+                        <th style="padding: 10px; border: 1px solid #dee2e6; width: 120px">Aksi</th>
                     @endif
                 @endauth
             </tr>
         </thead>
         <tbody>
             @foreach($rapats as $rapat)
-                <tr>
+                <tr style="vertical-align: top;">
                     {{-- Kolom Rapat --}}
                     <td style="padding: 10px; border: 1px solid #dee2e6;">
                         <div><strong>Judul:</strong> {{ $rapat->judul }}</div>
@@ -39,7 +39,7 @@
                                 <div><strong>Anggaran:</strong> Rp{{ number_format($rapat->konsumsi->anggaran ?? 0) }}</div>
                                 <div><strong>Total:</strong> Rp{{ number_format($rapat->konsumsi->total ?? 0) }}</div>
                                 @if ($rapat->konsumsi && $rapat->konsumsi->image_path)
-                                    <img src="{{ Storage::url($rapat->konsumsi->image_path) }}" alt="Konsumsi" style="max-width: 100px; margin-top: 10px;">
+                                    <img src="{{ Storage::url($rapat->konsumsi->image_path) }}" alt="Konsumsi" class="clickable-image" style="max-width: 100px; margin-top: 10px;">
                                 @endif
                             </td>
                         @endif
@@ -56,7 +56,7 @@
                                 <div><strong>Anggaran:</strong> Rp{{ number_format($rapat->sarpras->anggaran ?? 0) }}</div>
                                 <div><strong>Total:</strong> Rp{{ number_format($rapat->sarpras->total ?? 0) }}</div>
                                 @if ($rapat->sarpras && $rapat->sarpras->image_path)
-                                    <img src="{{ Storage::url($rapat->sarpras->image_path) }}" alt="Sarpras" style="max-width: 100px; margin-top: 10px;">
+                                    <img src="{{ Storage::url($rapat->sarpras->image_path) }}" alt="Sarpras" class="clickable-image" style="max-width: 100px; margin-top: 10px;">
                                 @endif
                             </td>
                         @endif
@@ -72,7 +72,7 @@
                                     <div><strong>Ruang:</strong> {{ $rapat->beritaAcara->ruang }}</div>
                                     <div><strong>Peserta:</strong> {{ $rapat->beritaAcara->jumlah_peserta }}</div>
                                     <div><strong>Hasil:</strong> {{ $rapat->beritaAcara->hasil_rapat }}</div>
-                                    <a href="{{ route('berita.download', ['id' => $rapat->id_jadwal]) }}" class="btn btn-sm btn-info mt-2">Download PDF</a>
+                                    <a href="{{ route('berita.download', $rapat->id_jadwal) }}" class="btn btn-sm btn-info mt-2">Download PDF</a>
                                 @else
                                     <em>Belum ada</em>
                                 @endif
@@ -83,9 +83,13 @@
                     {{-- Kolom Aksi --}}
                     @auth
                         @if(auth()->user()->role === 'admin')
-                            <td style="padding: 10px; border: 1px solid #dee2e6; text-align: center;">
-                                <button onclick="hapusRapat('{{ $rapat->id_jadwal }}')" class="btn btn-sm btn-danger mb-1">Hapus</button><br>
-                                <button onclick="editRapat({{ json_encode($rapat) }})" class="btn btn-sm btn-warning mt-1">Edit</button>
+                            <td>
+                                <div style="display: flex;flex-direction: column;">
+                                    <button onclick="hapusRapat('{{ $rapat->id_jadwal }}')" class="btn-list btn-danger">Hapus</button>
+                                    <button onclick="editRapat({{ json_encode($rapat) }})" class="btn-list btn-warning">Edit Rapat</button>
+                                    <a href="{{ @route('konsumsi.edit', $rapat->konsumsi->id_konsumsi) }}" class="btn-list btn-warning">Edit Konsumsi</a>
+                                    <a href="{{ @route('sarpras.edit', $rapat->sarpras->id_sarpras) }}" class="btn-list btn-warning">Edit Sarpras</a>
+                                </div>
                             </td>
                         @endif
                     @endauth

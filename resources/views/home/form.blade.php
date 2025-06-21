@@ -1,28 +1,40 @@
 <!-- Form Tambah Jadwal -->
-<div
-    style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 25px; margin-bottom: 30px;">
-    <h3 style="text-align: center; color: #007bff;">Tambah Jadwal Rapat</h3>
-    <form action="{{ route('jadwal-rapat.store') }}" method="POST">
-        @csrf
-        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-            <input type="text" name="judul" value="{{ old('judul', session('form.jadwal.judul')) }}" placeholder="Judul Rapat" required class="input-field">
-            <input type="date" name="tanggal" value="{{ old('tanggal', session('form.jadwal.tanggal')) }}" required class="input-field">
-            <input type="time" name="waktu" value="{{ old('waktu', session('form.jadwal.waktu')) }}" step="60" required class="input-field">
-            <input type="text" name="tempat" value="{{ old('tempat', session('form.jadwal.tempat')) }}" placeholder="Tempat" required class="input-field">
-        </div>
-        @error('conflict')
-            <div class="alert alert-danger">
-                {{ $message }}
+<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div
+        style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 25px; margin-bottom: 30px;">
+        <h3 style="text-align: center; color: #007bff;">Tambah Jadwal Rapat</h3>
+        <form action="{{ route('jadwal-rapat.store') }}" method="POST">
+            @csrf
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <input type="text" id="addJudul" name="judul"
+                    value="{{ old('judul', session('form.jadwal.judul')) }}"
+                    placeholder="Judul Rapat" required class="input-field">
+                <input type="date" id="addTanggal" name="tanggal"
+                    value="{{ old('tanggal', session('form.jadwal.tanggal')) }}"
+                    required class="input-field">
+                <input type="time" id="addWaktu" name="waktu"
+                    value="{{ old('waktu', session('form.jadwal.waktu')) }}"
+                    step="60" required class="input-field">
+                <input type="text" id="addTempat" name="tempat"
+                    value="{{ old('tempat', session('form.jadwal.tempat')) }}"
+                    placeholder="Tempat" required class="input-field">
             </div>
-        @enderror
-        <textarea name="deskripsi" placeholder="Deskripsi Acara" rows="3" required class="input-field"
-            style="width: 100%;">{{ session('form.jadwal.deskripsi') }}</textarea>
-        
+            @error('conflict')
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
+            @enderror
+            <textarea name="deskripsi" placeholder="Deskripsi Acara" rows="3" required class="input-field"
+                style="width: 100%;">{{ session('form.jadwal.deskripsi') }}</textarea>
 
-        <button type="submit" class="btn-primary" style="margin-top: 15px;">Simpan</button>
-    </form>
+            <div style="display: flex; gap: 15px; margin-top:15px">
+                <button type="button" onclick="tutupAddModal()" class="btn-light">Batal</button>
+                <button type="submit" class="btn-primary">Simpan</button>
+            </div>
+        </form>
+    </div>
 </div>
-
 
 <!-- Modal Edit Jadwal -->
 <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -40,8 +52,8 @@ background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align
             </div>
             <textarea name="deskripsi" id="edit-deskripsi" placeholder="Deskripsi" class="input-field" rows="3" required
                 style="width: 100%;"></textarea>
-            <div style="display: flex; gap: 15px;">
-                <button type="button" onclick="tutupModal()" class="btn-light">Batal</button>
+            <div style="display: flex; gap: 15px; margin-top: 15px">
+                <button type="button" onclick="tutupEditModal()" class="btn-light">Batal</button>
                 <button type="submit" class="btn-primary">Simpan Perubahan</button>
             </div>
         </form>
@@ -83,8 +95,22 @@ background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align
 
     }
 
-    function tutupModal() {
+    function addRapat(tanggal = null) {
+        if (!tanggal) {
+            // set tanggal hari ini
+            tanggal = (new Date()).toISOString().split('T')[0];
+        }
+        const inputTanggal = document.getElementById('addTanggal')
+        inputTanggal.value = tanggal
+        document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function tutupEditModal() {
         document.getElementById('editModal').style.display = 'none';
+    }
+
+    function tutupAddModal() {
+        document.getElementById('addModal').style.display = 'none';
     }
 
     document.getElementById('editForm').addEventListener('submit', function (e) {
@@ -111,7 +137,7 @@ background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align
             .then(res => {
                 if (res.ok) {
                     alert('Jadwal berhasil diupdate.');
-                    tutupModal();
+                    tutupEditModal();
                     fetchJadwalRapat().then(() => {
                         renderCalendar(currentDate)
                         // Otomatis update detail acara yang dipilih

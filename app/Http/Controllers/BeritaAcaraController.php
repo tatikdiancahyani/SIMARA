@@ -5,15 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\BeritaAcara;
 use App\Models\JadwalRapat;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BeritaAcaraController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $beritaAcara = BeritaAcara::all(); // Ambil semua data dari tabel BeritaAcara
 
-        return view('berita-acara.index', compact('beritaAcara')); // Kirim $beritaAcara ke view
+        $selectedDate = $request->input('date');
+
+        if (empty($selectedDate)) {
+            $selectedDate = Carbon::today()->toDateString(); // YYYY-MM-DD format
+        } else {
+            // Ambil tanggal sesuai pilihan user
+            $selectedDate = Carbon::parse($selectedDate)->toDateString();
+        }
+        $beritaAcara = BeritaAcara::whereDate('tanggal', $selectedDate)
+            ->orderBy('id_berita_acara')
+            ->get();
+
+        return view('berita-acara.index', compact('beritaAcara', 'selectedDate')); // Kirim $beritaAcara ke view
     }
 
     public function store(Request $request)

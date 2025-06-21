@@ -10,7 +10,8 @@ class KonsumsiController extends Controller
 {
     public function create(Request $request)
     {
-        return view('konsumsi.form');
+        $konsumsi = session('form.konsumsi',[]);
+        return view('konsumsi.form', compact('konsumsi'));
     }
 
     public function store(Request $request)
@@ -38,12 +39,32 @@ class KonsumsiController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $imagePath = Storage::disk('public')->putFile('konsumsi', $file);
+            $konsumsiData['image_path'] = $imagePath;
             session()->put('form.konsumsi.image_path', $imagePath);
         }
 
-        session()->save();
+        if( $request->input('id_konsumsi') ){
+            // update ke database
+            $id = $request->input('id_konsumsi');
+            
+            $konsumsi = Konsumsi::findOrFail($id);
+            $konsumsi->update($konsumsiData);
+            return redirect()->route('home');
+        }else{
+            // Next ke sarpras
+            session()->save();
+            // Setelah simpan, redirect ke form sarpras
+            return redirect()->route('form.sarpras');
+        }
 
-        // Setelah simpan, redirect ke form sarpras
-        return redirect()->route('form.sarpras');
+    }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $konsumsi = Konsumsi::findOrFail($id);
+
+        return view('konsumsi.form', compact('konsumsi'));
     }
 }

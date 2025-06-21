@@ -1,32 +1,38 @@
 @extends('layouts.app')
 
 @section('contents')
-<div class="container" style="max-width: 1000px; margin: auto; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<div class="container"
+    style="max-width: 1000px; margin: auto;">
 
     @if(session('success'))
-    <div style="background-color: #d4edda; color: #155724; padding: 15px; border-left: 5px solid #28a745; border-radius: 8px; margin-bottom: 20px;">
-        {{ session('success') }}
-    </div>
+        <div
+            style="background-color: #d4edda; color: #155724; padding: 15px; border-left: 5px solid #28a745; border-radius: 8px; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
     @endif
-
+    <!-- Kalender -->
+    <h3 style="margin-top: 0px; margin-bottom: 15px; font-weight: bold; color: #333; text-align: center;">Kalender
+        Rapat Kalurahan Purwomartani</h3>
     @auth
-    <!-- Tampil Form Tambah & Edit Jadwal Jika sudah login -->
-    @include('home.form')
+        <div style="padding-bottom: 15px; text-align: center">
+        <!-- Tampil Form Tambah & Edit Jadwal Jika sudah login -->
+        <button type="button" onclick="addRapat()" class="btn-primary" style="width: auto">+ Buat Jadwal</button>
+        @include('home.form')
+        </div>
     @endauth
-    
-   <!-- Kalender -->
-    <h3 style="margin-top: 40px; margin-bottom: 15px; font-weight: bold; color: #333; text-align: center;">Kalender Rapat Kalurahan Purwomartani</h3>
-    <div class="calendar-container" style="background: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">
 
 
     <!-- Kalender -->
-    <div class="calendar-container" style="background: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">
-        <div class="controls" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #007bff; color: white;">
+    <div class="calendar-container"
+        style="background: #ffffff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">
+        <div class="controls"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #007bff; color: white;">
             <button id="prevMonth" class="btn-light">← Sebelumnya</button>
             <h2 id="currentMonth" style="margin: 0;"></h2>
             <button id="nextMonth" class="btn-light">Berikutnya →</button>
         </div>
-        <div class="weekdays" style="display: grid; grid-template-columns: repeat(7, 1fr); background-color: #f1f3f5; text-align: center; padding: 10px 0; font-weight: bold;">
+        <div class="weekdays"
+            style="display: grid; grid-template-columns: repeat(7, 1fr); background-color: #f1f3f5; text-align: center; padding: 10px 0; font-weight: bold;">
             <div>Min</div>
             <div>Sen</div>
             <div>Sel</div>
@@ -35,7 +41,8 @@
             <div>Jum</div>
             <div>Sab</div>
         </div>
-        <div id="calendar" class="calendar" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 20px;"></div>
+        <div id="calendar" class="calendar"
+            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 20px;"></div>
 
         <div id="eventDetails" style="padding: 20px; border-top: 1px solid #eee; background-color: #fafafa;">
             <h4>Detail Acara</h4>
@@ -127,7 +134,7 @@
 
 
             dayCell.dataset['tanggal'] = `${year}-${month+1}-${day}`;
-            dayCell.addEventListener('click', async function() {
+            dayCell.addEventListener('click', async function () {
                 const tanggal = this.dataset['tanggal'];
                 const detail = document.getElementById('eventContent');
                 detail.innerHTML = await fetchDetailRapat(tanggal)
@@ -157,19 +164,20 @@
         const popupImage = document.getElementById('popupImage');
 
         if (clickableImage && imagePopup && popupImage) {
-            clickableImage.addEventListener('click', function() {
+            clickableImage.addEventListener('click', function () {
                 // Set the source of the popup image to the full-size image
                 popupImage.src = this.src; // Uses the same source for simplicity
                 imagePopup.style.display = 'flex'; // Show the popup
             });
 
             // Close the popup when clicking on the overlay or the image itself
-            imagePopup.addEventListener('click', function() {
+            imagePopup.addEventListener('click', function () {
                 imagePopup.style.display = 'none'; // Hide the popup
                 popupImage.src = ''; // Clear image source to free memory
             });
         }
     };
+
 </script>
 
 
@@ -274,6 +282,18 @@
     .btn-warning:hover {
         background-color: #e0a800;
     }
+    
+    .btn-list {
+        padding: 6px;
+        margin: 0px;
+        text-decoration: none;
+        margin-top: 3px;
+        text-align: center;
+        font-size: small;
+    }
+    .btn-list:hover {
+        text-decoration: none;
+    }
 
     /* Image popup */
     .clickable-image {
@@ -281,26 +301,31 @@
     }
 
     .image-popup-overlay {
-        display: none; /* Hidden by default */
+        display: none;
+        /* Hidden by default */
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8); /* Dark overlay */
+        background: rgba(0, 0, 0, 0.8);
+        /* Dark overlay */
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000; /* Ensure it's on top of other content */
+        z-index: 1000;
+        /* Ensure it's on top of other content */
     }
 
     .image-popup-content {
         max-width: 90%;
         max-height: 90%;
-        object-fit: contain; /* Ensure image fits without cropping */
-        cursor: pointer; /* Indicate it's clickable to close */
+        object-fit: contain;
+        /* Ensure image fits without cropping */
+        cursor: pointer;
+        /* Indicate it's clickable to close */
     }
+
 </style>
 
 @endsection
-

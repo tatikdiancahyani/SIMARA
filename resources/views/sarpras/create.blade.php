@@ -29,7 +29,6 @@
         width: 90%;
         max-width: 600px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        margin-top: 200px;
     }
 
     input, select {
@@ -85,26 +84,32 @@
         <!-- Modal Popup -->
         <div id="modalAnggaran" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <h2>Perhitungan Sarpras</h2>
+                <div>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Perhitungan Sarpras</h2>
+                </div>
                 <form action="{{ route('submit.all') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id_jadwal" value="{{ request('id_jadwal') }}">
+                    @if(isset($sarpras->id_sarpras))
+                        <!-- Update ID -->
+                        <input type="hidden" name="id_sarpras" value="{{ $sarpras->id_sarpras }}">
+                    @endif
 
                     <label for="nama_sarpras">Nama Sarpras:</label>
-                    <input type="text" id="nama_sarpras" name="nama_sarpras" value="{{ old('nama_sarpras', session('form.sarpras.nama_sarpras')) }}" placeholder="Masukkan nama sarpras" required><br><br>
+                    <input type="text" id="nama_sarpras" name="nama_sarpras" value="{{ old('nama_sarpras', @$sarpras['nama_sarpras']) }}" placeholder="Masukkan nama sarpras" required><br><br>
 
                     <label for="jumlah">Jumlah:</label>
-                    <input type="number" id="jumlah" name="jumlah" value="{{ old('jumlah', session('form.sarpras.jumlah')) }}" placeholder="Masukkan jumlah" oninput="hitungTotal()"required><br><br>
+                    <input type="number" id="jumlah" name="jumlah" value="{{ old('jumlah', @$sarpras['jumlah']) }}" placeholder="Masukkan jumlah" oninput="hitungTotal()"required><br><br>
 
                     <label for="harga">Harga:</label>
-                    <input type="number" id="harga" name="harga" value="{{ old('harga', session('form.sarpras.harga')) }}" placeholder="Masukkan harga" oninput="hitungTotal()"required><br><br>
+                    <input type="number" id="harga" name="harga" value="{{ old('harga', @$sarpras['harga']) }}" placeholder="Masukkan harga" oninput="hitungTotal()"required><br><br>
 
                     <label for="pajakPersen">Pajak (%):</label>
-                    <input type="number" id="pajakPersen" name="pajak" value="{{ old('pajak', session('form.sarpras.pajak')) }}" placeholder="Masukkan persen pajak" oninput="hitungTotal()"required><br><br>
+                    <input type="number" id="pajakPersen" name="pajak" value="{{ old('pajak', @$sarpras['pajak']) }}" placeholder="Masukkan persen pajak" oninput="hitungTotal()"required><br><br>
 
                     <label for="anggaran">Anggaran:</label>
-                    <input type="number" id="anggaran" name="anggaran" value="{{ old('anggaran', session('form.sarpras.anggaran')) }}" placeholder="Masukkan anggaran" oninput="hitungTotal()"required><br><br>
+                    <input type="number" id="anggaran" name="anggaran" value="{{ old('anggaran', @$sarpras['anggaran']) }}" placeholder="Masukkan anggaran" oninput="hitungTotal()"required><br><br>
 
                     <label for="total">Total:</label>
                     <input type="text" id="total" name="total" class="total-input" readonly>
@@ -112,9 +117,9 @@
                     <div id="warning" class="warning" style="display: none;"></div>
 
                     <div class="form-group">
-                        @if (session('form.sarpras.image_path'))
+                        @if (@$sarpras['image_path'])
                             <b>Gambar:</b><br/>
-                            <img src="{{ Storage::url(session('form.sarpras.image_path')) }}" alt="Meeting Image" class="img-fluid" style="max-width: 300px;">
+                            <img src="{{ Storage::url(@$sarpras['image_path']) }}" alt="Meeting Image" class="img-fluid" style="max-width: 300px;">
                         @else
                             <label for="meeting_image">Gambar (Opsional):</label>
                             <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
@@ -122,9 +127,10 @@
                             
                         @endif
                     </div>
-
-                    <a href="{{ route('form.konsumsi') }}" class="btn btn-secondary ">Back</a>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div style="display: flex; gap: 15px; margin-top:15px">
+                        <a href="{{ route('form.konsumsi') }}" class="btn btn-secondary ">Back</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>

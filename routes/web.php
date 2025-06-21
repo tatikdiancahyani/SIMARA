@@ -44,10 +44,12 @@ Route::middleware('auth')->group(function () {
     
     //form konsumsi
     Route::get('/form/konsumsi', [KonsumsiController::class, 'create'])->name('form.konsumsi');
+    Route::get('/edit/konsumsi/{id}', [KonsumsiController::class, 'edit'])->name('konsumsi.edit');
     Route::post('/form/konsumsi', [KonsumsiController::class, 'store'])->name('konsumsi.store');
     
     //form sarpras
     Route::get('/form/sarpras', [SarprasController::class, 'create'])->name('form.sarpras');
+    Route::get('/edit/sarpras/{id}', [SarprasController::class, 'edit'])->name('sarpras.edit');
     
     // Simpan semua ke DB
     Route::post('/submit-all', [SarprasController::class, 'submitAll'])->name('submit.all');
